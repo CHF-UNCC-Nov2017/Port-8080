@@ -1,0 +1,45 @@
+from pprint import pprint
+
+import requests
+import json
+
+#Proudly worked on by Elexie Munyeneh
+#Comments by Christopher Evans
+
+#Our idea was to let your phone track where you are and match the location to the transaction
+#The data was SUCCESSFULLY extracted from Yodlee 
+#It couldn't be implemented onto our idea, because it didn't have locations. (Though we were told that it should've had it.)
+
+headers = {
+    'Accept': 'application/json',
+    'User-Agent': 'TopHack Hackathon Contest',
+    'Accept-Language': 'en-US'
+}
+
+cobrand_data = {
+    'cobrandLogin': 'sbCobdcc7c01eedcbc3b8891a7c32c05c98851a',
+    'cobrandPassword': 'c66c71c2-cb13-4049-b2e3-8f7485926d65'
+}
+
+resp = requests.post('https://rest.developer.yodlee.com/services/srest/restserver/v1.0'
+                     + '/authenticate/coblogin',
+                     data=cobrand_data, headers=headers).json()
+cotoken = resp['cobrandConversationCredentials']['sessionToken']
+
+user_data = {
+    'login':'sbMemdcc7c01eedcbc3b8891a7c32c05c98851a1',
+    'password':'sbMemdcc7c01eedcbc3b8891a7c32c05c98851a1#123',
+    'cobSessionToken': cotoken
+}
+
+resp = requests.post('https://rest.developer.yodlee.com/services/srest/restserver/v1.0' +
+                     '/authenticate/login', data=user_data, headers=headers).json()
+utoken = resp['userContext']['conversationCredentials']['sessionToken']
+
+#print(cotoken)
+#print(utoken)
+
+headers['Authorization'] = '{cobSession='+cotoken+',userSession='+utoken+'}'
+resp = requests.get('https://developer.api.yodlee.com/ysl' + '/restserver/v1/accounts', headers=headers).json()
+
+pprint(resp)

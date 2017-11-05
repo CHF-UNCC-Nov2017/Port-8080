@@ -1,0 +1,71 @@
+<html>
+<!-- Chris Evans and Lewis Collier -->
+<header>
+	<div>
+		<!-- This is the sole button that will be pressed -->
+		<button onclick="getLocation()">Complete Transaction</button>
+
+		<!-- These will be the three main logs for status -->
+		<p id="demo"></p>
+		<p id="sequel"></p>
+		<p id="squeakquel"></p>
+
+		<!-- This is where the fun begins -->
+		<script>
+			//Assigning the dialog values
+			var y = document.getElementById("demo");
+			var x = document.getElementById("sequel");
+			var z = document.getElementById("squeakquel");
+
+			//Based on these coordinate we would be Lilesville, NC (50 miles off)
+			var lat = 35.31
+			var long = -80.74
+			var tolerance = .005
+
+			//This function wil obatin the true location
+			function getLocation() {
+	    		if (navigator.geolocation) 
+	    		{
+	        		navigator.geolocation.getCurrentPosition(showPosition);
+	    		} 
+	    		else 
+	    		{
+	        		x.innerHTML = "Geolocation is not supported by this browser.";
+	    		}
+			}
+
+			//This function will showcase all known positions
+			function showPosition(position) 
+			{
+
+				//This will provide the location of the transaction
+				x.innerHTML = "Transaction Latitude: " + position.coords.latitude + 
+	    		"<br>Transaction Longitude: " + position.coords.longitude; 
+
+	    		//This will provide the location of the device
+	    		y.innerHTML = "Current Latitude: " + lat + 
+	    		"<br>Current Longitude: " + long; 
+
+	    		//This will subtract the coordinates of the locations and find the differences
+	    		//The tolerance will be compared to the difference
+	    		//The smartphone and transaction won't be happening in the same place in physical space which makes tolerance useful 
+	    		if ((Math.abs(position.coords.latitude - lat) < .005) && Math.abs((position.coords.longitude - long) < .005)) 
+	    		{
+	    			z.innerHTML = "<br>Confirmed!";
+	    		}
+	    		else
+	    		{
+	    			z.innerHTML = "<br>Denied!";
+	    		}
+
+	    		//Comments by Christopher Evans
+
+				//Our idea was to let your phone track where you are and match the location to the transaction
+				//The data was SUCCESSFULLY extracted from Yodlee
+				//It couldn't be implemented onto our idea, because it didn't have locations. (Though we were told that it should've had it.)
+
+			}
+		</script>
+	</div>
+</header>
+</html>
